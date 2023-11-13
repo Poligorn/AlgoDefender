@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
@@ -9,6 +10,14 @@ public class LevelController : MonoBehaviour
     public static bool finished = false;
 
     public static int level = 1;
+
+    public GameObject victoryPanel;
+    public GameObject defeatPanel;
+
+    private void Awake()
+    {
+        level = PlayerPrefs.GetInt("level", 1);
+    }
 
     private void Start()
     {
@@ -46,16 +55,28 @@ public class LevelController : MonoBehaviour
 
     public void Victory()
     {
-        print("Victory!");
         finished = true;
         level += 1;
+        victoryPanel.SetActive(true);
+        GameController.SaveLevel();
     }
 
     public void Defeat()
     {
-        print("Defeat!");
         finished = true;
-        level = 1;
+        defeatPanel.SetActive(true);
+    }
+
+
+    public void RestartLevel()
+    {
+        int index = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(index);
+    }
+
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
 }
